@@ -8,7 +8,7 @@ Created on Sat Mar 21 00:30:50 2026
 import streamlit as st
 
 # --- Logo 檔案名稱設定 ---
-logo_filename = "logo.png" 
+logo_filename = "logo.PNG" 
 
 # 1. 🛑 頁面配置
 st.set_page_config(
