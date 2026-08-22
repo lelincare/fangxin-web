@@ -100,7 +100,10 @@ function initBgmPlayer() {
     });
   }
 
-  const interactionEvents = ['click', 'scroll', 'keydown', 'touchstart'];
+  // 第一次「有效使用者手勢」時嘗試自動播放
+  // 注意:scroll(捲動)不算瀏覽器認可的使用者手勢,不能用來觸發帶聲音的播放,
+  // 用它來觸發只會讓瀏覽器擋下嘗試、又白白耗掉唯一一次機會,故不列入
+  const interactionEvents = ['click', 'keydown', 'touchend', 'pointerdown'];
   interactionEvents.forEach(evt => {
     window.addEventListener(evt, tryAutoplayOnFirstInteraction, { once: true, passive: true });
   });
