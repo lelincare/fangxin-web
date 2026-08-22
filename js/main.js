@@ -59,31 +59,31 @@ function initBgmPlayer() {
   // 記住使用者在本次瀏覽中的播放狀態(跨頁面),但絕不自動播放,需使用者主動按過一次
   const STORAGE_KEY = 'fangxin_bgm_playing';
 
-  function setIcon(playing) {
-    btn.textContent = playing ? '🔊' : '🎵';
+  function setPlayingState(playing) {
+    btn.classList.toggle('is-playing', playing);
     btn.setAttribute('aria-label', playing ? '暫停背景音樂' : '播放背景音樂');
   }
 
   btn.addEventListener('click', () => {
     if (audio.paused) {
       audio.play().then(() => {
-        setIcon(true);
+        setPlayingState(true);
         sessionStorage.setItem(STORAGE_KEY, '1');
       }).catch(() => {
         // 瀏覽器阻擋自動播放等情況
       });
     } else {
       audio.pause();
-      setIcon(false);
+      setPlayingState(false);
       sessionStorage.setItem(STORAGE_KEY, '0');
     }
   });
 
   // 只有使用者「這次瀏覽中已經手動按過播放」,切換頁面才延續播放狀態
   if (sessionStorage.getItem(STORAGE_KEY) === '1') {
-    audio.play().then(() => setIcon(true)).catch(() => setIcon(false));
+    audio.play().then(() => setPlayingState(true)).catch(() => setPlayingState(false));
   } else {
-    setIcon(false);
+    setPlayingState(false);
   }
 }
 

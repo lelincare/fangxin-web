@@ -554,26 +554,43 @@ a { color: inherit; }
 /* ---------- Floating music button ---------- */
 .bgm-player {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: 24px;
+  left: 24px;
   z-index: 200;
 }
 .bgm-btn {
-  background-color: var(--color-burgundy);
-  color: #fff;
-  border: none;
+  background-color: #ffffff;
+  color: var(--color-burgundy);
+  border: 1.5px solid rgba(128, 0, 32, 0.18);
   border-radius: 50%;
-  width: 54px;
-  height: 54px;
-  font-size: 22px;
+  width: 44px;
+  height: 44px;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(128,0,32,0.35);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  padding: 0;
 }
-.bgm-btn:hover { transform: scale(1.08); }
+.bgm-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+.bgm-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bgm-btn.is-playing {
+  background-color: var(--color-burgundy);
+  color: #ffffff;
+  border-color: var(--color-burgundy);
+}
 
 /* ---------- Utility ---------- */
 .text-center { text-align: center; }
