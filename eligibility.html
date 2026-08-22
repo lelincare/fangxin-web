@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>申請資格與補助說明｜芳心居家長照機構</title>
+<meta name="description" content="長照服務申請資格說明，以及低收入戶、中低收入戶、一般戶的政府補助比例。">
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="images/logo.png" alt="芳心居家長照機構 Logo">
+      <span class="brand-text">芳心居家長照機構<span>交給芳心，家屬放心</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="開啟選單">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="eligibility.html">申請資格與補助</a></li>
+      <li><a href="resources.html">教育資源</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="container">
+  <section class="section">
+    <h1 class="section-title">申請資格與補助說明</h1>
+    <p class="section-subtitle">了解您是否符合長照服務申請資格，以及政府補助比例</p>
+
+    <div class="eligibility-block reveal">
+      <h3 id="eligibilityTitle">👵 長照服務申請資格</h3>
+      <p id="eligibilityIntro" style="color:#555;font-size:15px;"></p>
+      <ul id="eligibilityList"></ul>
+
+      <hr style="border:0;border-top:1px dashed #aad5aa;margin:20px 0;">
+
+      <h3 id="subsidyTitle" style="font-size:18px;">💰 補助原則</h3>
+      <p id="subsidyIntro" style="color:#555;font-size:15px;"></p>
+      <table class="subsidy-table">
+        <thead>
+          <tr><th>身分別</th><th>政府補助</th><th>備註</th></tr>
+        </thead>
+        <tbody id="subsidyRows"></tbody>
+      </table>
+    </div>
+
+    <div class="mt-24 reveal" style="text-align:center;">
+      <p style="color:var(--color-muted); font-size:14px;">實際補助資格與比例以長照管理中心最新公告為準</p>
+      <a href="contact.html" class="btn btn-primary">諮詢我的補助資格</a>
+    </div>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <p>© <span id="footerYear"></span> 芳心居家長照機構 All Rights Reserved.</p>
+  <p>台南市佳里區中興街22號1F ｜ <a href="tel:0965833585">0965-833-585</a></p>
+</footer>
+
+<div class="bgm-player">
+  <button id="bgmToggle" class="bgm-btn" aria-label="播放背景音樂">🎵</button>
+  <audio id="bgmAudio" src="audio/bgm.mp3" loop preload="none"></audio>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+async function renderEligibility() {
+  const data = await loadJSON('content/eligibility.json');
+  if (!data) return;
+
+  document.getElementById('eligibilityTitle').textContent = data.eligibility_title;
+  document.getElementById('eligibilityIntro').textContent = data.eligibility_intro;
+  document.getElementById('eligibilityList').innerHTML = (data.eligibility_items || []).map(i => `
+    <li>${i.text}${i.alert ? `<br><span class="tag-alert">${i.alert}</span>` : ''}</li>
+  `).join('');
+
+  document.getElementById('subsidyTitle').textContent = data.subsidy_title;
+  document.getElementById('subsidyIntro').textContent = data.subsidy_intro;
+  document.getElementById('subsidyRows').innerHTML = (data.subsidy_rows || []).map(r => `
+    <tr><td>${r.category}</td><td class="pct">${r.percent}</td><td>${r.note}</td></tr>
+  `).join('');
+}
+renderEligibility();
+</script>
+</body>
+</html>

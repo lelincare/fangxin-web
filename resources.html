@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育資源｜芳心居家長照機構</title>
+<meta name="description" content="長照衛教影片與家屬照顧小知識，陪家屬一起學習照顧技巧。">
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="images/logo.png" alt="芳心居家長照機構 Logo">
+      <span class="brand-text">芳心居家長照機構<span>交給芳心，家屬放心</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="開啟選單">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="eligibility.html">申請資格與補助</a></li>
+      <li><a href="resources.html">教育資源</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="container">
+
+  <section class="section">
+    <h1 class="section-title" id="videosTitle">長照衛教影片</h1>
+    <p class="section-subtitle" id="videosSubtitle"></p>
+    <div class="video-grid" id="videoGrid"></div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" id="articlesTitle">家屬照顧小知識</h2>
+    <div id="articleList"></div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <p>© <span id="footerYear"></span> 芳心居家長照機構 All Rights Reserved.</p>
+  <p>台南市佳里區中興街22號1F ｜ <a href="tel:0965833585">0965-833-585</a></p>
+</footer>
+
+<div class="bgm-player">
+  <button id="bgmToggle" class="bgm-btn" aria-label="播放背景音樂">🎵</button>
+  <audio id="bgmAudio" src="audio/bgm.mp3" loop preload="none"></audio>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+// 從各種常見 YouTube 網址格式解析出影片 ID(用來組縮圖網址跟跳轉連結)
+function extractYouTubeId(url) {
+  if (!url) return '';
+  const patterns = [
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+  ];
+  for (const p of patterns) {
+    const match = url.match(p);
+    if (match) return match[1];
+  }
+  return '';
+}
+
+async function renderResources() {
+  const data = await loadJSON('content/resources.json');
+  if (!data) return;
+
+  document.getElementById('videosTitle').textContent = data.videos_title;
+  document.getElementById('videosSubtitle').textContent = data.videos_subtitle;
+  document.getElementById('videoGrid').innerHTML = (data.videos || []).map(v => {
+    const videoId = extractYouTubeId(v.youtube_url);
+    const thumbSrc = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+    const watchUrl = videoId ? `https://www.youtube.com/watch?v=${videoId}` : (v.youtube_url || '#');
+    return `
+    <a href="${watchUrl}" target="_blank" rel="noopener" class="video-card reveal visible" style="text-decoration:none;color:inherit;">
+      <div class="video-embed">
+        ${thumbSrc
+          ? `<img src="${thumbSrc}" alt="${v.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">
+             <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.15);">
+               <div style="width:64px;height:64px;border-radius:50%;background:rgba(128,0,32,0.85);display:flex;align-items:center;justify-content:center;">
+                 <div style="width:0;height:0;border-top:12px solid transparent;border-bottom:12px solid transparent;border-left:20px solid white;margin-left:4px;"></div>
+               </div>
+             </div>`
+          : `<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f0f0f0;color:#999;font-size:13px;">影片連結格式無法辨識</div>`}
+      </div>
+      <div class="video-info">
+        <h3>${v.title}</h3>
+        <p>${v.description}</p>
+        <p style="color:var(--color-burgundy);font-size:13px;margin-top:8px;font-weight:700;">▶ 前往 YouTube 觀看</p>
+      </div>
+    </a>
+  `;
+  }).join('');
+
+  document.getElementById('articlesTitle').textContent = data.articles_title;
+  document.getElementById('articleList').innerHTML = (data.articles || []).map(a => {
+    const introHtml = a.intro
+      ? `<p style="color:var(--color-text-soft);margin-top:0;">${a.intro}</p>`
+      : '';
+    const sectionsHtml = (a.sections || []).map(s => `
+      <div style="margin-top:18px;">
+        <h4 style="color:var(--color-navy);font-family:var(--font-display);font-size:16px;margin:0 0 8px;">${s.heading}</h4>
+        <ul style="margin:0;padding-left:20px;color:var(--color-text-soft);">
+          ${(s.items || []).map(i => `<li style="margin-bottom:8px;"><strong style="color:var(--color-burgundy);">${i.label}：</strong>${i.text}</li>`).join('')}
+        </ul>
+      </div>
+    `).join('');
+    // 相容舊格式(單純 content 純文字,若還有舊資料未升級)
+    const legacyHtml = a.content
+      ? `<p style="margin-bottom:0;color:var(--color-text-soft);">${a.content}</p>`
+      : '';
+    return `
+    <div class="card reveal visible" style="margin-bottom:18px;">
+      <h3 style="font-family:var(--font-display);color:var(--color-navy);margin-top:0;">${a.title}</h3>
+      ${introHtml}
+      ${sectionsHtml}
+      ${legacyHtml}
+    </div>
+  `;
+  }).join('');
+}
+renderResources();
+</script>
+</body>
+</html>

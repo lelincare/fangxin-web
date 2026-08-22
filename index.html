@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>芳心居家長照機構｜交給芳心，家屬放心</title>
+<meta name="description" content="芳心居家長照機構由資深護理師團隊創立，提供台南佳里、麻豆、學甲地區居家照顧與居家喘息服務。">
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="images/logo.png" alt="芳心居家長照機構 Logo">
+      <span class="brand-text">芳心居家長照機構<span>交給芳心，家屬放心</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="開啟選單">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="eligibility.html">申請資格與補助</a></li>
+      <li><a href="resources.html">教育資源</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1 id="heroTitle">芳心居家長照機構</h1>
+    <p class="tagline" id="heroTagline">交給芳心，家屬放心</p>
+    <p class="lead" id="heroIntro">我們是由資深護理師團隊創立，致力於提供有溫度的專業照護。讓長輩在家也能享有尊嚴、舒適的生活品質。</p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn btn-primary" id="ctaPrimary">立即諮詢</a>
+      <a href="services.html" class="btn btn-secondary" id="ctaSecondary">了解服務項目</a>
+    </div>
+  </div>
+</section>
+
+<svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,32 C240,60 480,0 720,20 C960,40 1200,10 1440,32 L1440,60 L0,60 Z" fill="#ffffff"></path>
+</svg>
+
+<div class="container">
+
+  <div class="service-area-banner reveal">
+    <strong class="label" id="serviceAreaLabel">🚚 服務地區</strong><br>
+    <span class="areas" id="serviceAreaText">佳里區、麻豆區、學甲區</span>
+  </div>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title">我們的服務</h2>
+    <p class="section-subtitle">三大核心服務，陪伴長輩與家庭安心生活</p>
+    <div class="feature-grid" id="featureGrid"></div>
+  </section>
+
+  <section class="section reveal" style="padding-top:0;">
+    <div class="philosophy-box">
+      <h3>🚀 邁向長照 3.0：專業護理與以人為本</h3>
+      <p>芳心居家長照機構率先響應政府長照 3.0 政策，發揮護理師團隊專業優勢，提供跨專業資源連結與以人為本的溫暖陪伴。</p>
+      <p style="margin-bottom:0;"><a href="about.html" class="btn btn-secondary">了解我們的理念</a></p>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <p>© <span id="footerYear"></span> 芳心居家長照機構 All Rights Reserved.</p>
+  <p>台南市佳里區中興街22號1F ｜ <a href="tel:0965833585">0965-833-585</a></p>
+</footer>
+
+<div class="bgm-player">
+  <button id="bgmToggle" class="bgm-btn" aria-label="播放背景音樂">🎵</button>
+  <audio id="bgmAudio" src="audio/bgm.mp3" loop preload="none"></audio>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+async function renderHome() {
+  const data = await loadJSON('content/home.json');
+  if (!data) return;
+  document.getElementById('heroTitle').textContent = data.hero_title;
+  document.getElementById('heroTagline').textContent = data.hero_tagline;
+  document.getElementById('heroIntro').textContent = data.hero_intro;
+  document.getElementById('ctaPrimary').textContent = data.cta_primary_text;
+  document.getElementById('ctaPrimary').href = data.cta_primary_link;
+  document.getElementById('ctaSecondary').textContent = data.cta_secondary_text;
+  document.getElementById('ctaSecondary').href = data.cta_secondary_link;
+  document.getElementById('serviceAreaLabel').textContent = data.service_area_label;
+  document.getElementById('serviceAreaText').textContent = data.service_area_text;
+
+  const grid = document.getElementById('featureGrid');
+  grid.innerHTML = (data.features || []).map(f => `
+    <a href="${f.link}" class="feature-card reveal visible">
+      <div class="icon">${f.icon}</div>
+      <h3>${f.title}</h3>
+      <p>${f.desc}</p>
+    </a>
+  `).join('');
+}
+renderHome();
+</script>
+</body>
+</html>

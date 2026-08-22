@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>關於我們｜芳心居家長照機構</title>
+<meta name="description" content="芳心居家長照機構由資深護理師團隊創立，落實長照3.0專業護理導向與以人為本的照護理念。">
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="images/logo.png" alt="芳心居家長照機構 Logo">
+      <span class="brand-text">芳心居家長照機構<span>交給芳心，家屬放心</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="開啟選單">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="eligibility.html">申請資格與補助</a></li>
+      <li><a href="resources.html">教育資源</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="container">
+
+  <section class="section">
+    <h1 class="section-title" id="historyTitle">機構沿革</h1>
+    <div class="card reveal">
+      <p id="historyText" style="font-size:16px; color:var(--color-text-soft); margin:0;"></p>
+    </div>
+  </section>
+
+  <section class="section" id="mission" style="padding-top:0;">
+    <div class="philosophy-box reveal">
+      <h3 id="missionTitle">🚀 邁向長照 3.0：專業護理與以人為本</h3>
+      <p id="missionIntro" style="text-align:left; color:var(--color-text);"></p>
+      <ul id="missionList"></ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" id="galleryTitle">團隊與服務身影</h2>
+    <p class="section-subtitle" id="gallerySubtitle"></p>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <p>© <span id="footerYear"></span> 芳心居家長照機構 All Rights Reserved.</p>
+  <p>台南市佳里區中興街22號1F ｜ <a href="tel:0965833585">0965-833-585</a></p>
+</footer>
+
+<div class="bgm-player">
+  <button id="bgmToggle" class="bgm-btn" aria-label="播放背景音樂">🎵</button>
+  <audio id="bgmAudio" src="audio/bgm.mp3" loop preload="none"></audio>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+async function renderAbout() {
+  const data = await loadJSON('content/about.json');
+  if (!data) return;
+
+  document.getElementById('historyTitle').textContent = data.history_title;
+  document.getElementById('historyText').textContent = data.history_text;
+
+  document.getElementById('missionTitle').textContent = data.mission_title;
+  document.getElementById('missionIntro').textContent = data.mission_intro;
+  document.getElementById('missionList').innerHTML = (data.mission_blocks || []).map(b => `
+    <li><strong>${b.title}：</strong>${b.text}</li>
+  `).join('');
+
+  document.getElementById('galleryTitle').textContent = data.gallery_title;
+  document.getElementById('gallerySubtitle').textContent = data.gallery_subtitle;
+  document.getElementById('galleryGrid').innerHTML = (data.gallery || []).map(g => `
+    <div class="gallery-item reveal visible">
+      <img src="${g.image}" alt="${g.caption}" loading="lazy">
+      <div class="caption">
+        <strong class="caption-title">${g.caption}</strong>
+        <span class="caption-desc">${g.desc || ''}</span>
+      </div>
+    </div>
+  `).join('');
+}
+renderAbout();
+</script>
+</body>
+</html>

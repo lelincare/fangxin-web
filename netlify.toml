@@ -1,0 +1,12 @@
+[build]
+  publish = "."
+  command = ""
+
+# 純靜態網站,不需要任何 build 指令
+# Netlify 會自動偵測 HTML 中 data-netlify="true" 的表單(contact.html 內的聯絡表單)
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"

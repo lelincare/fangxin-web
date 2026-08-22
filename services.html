@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>服務項目｜芳心居家長照機構</title>
+<meta name="description" content="芳心居家長照機構提供居家照顧服務(身體照顧、生活照顧、陪同外出)與居家喘息服務。">
+<link rel="icon" href="images/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="images/logo.png" alt="芳心居家長照機構 Logo">
+      <span class="brand-text">芳心居家長照機構<span>交給芳心，家屬放心</span></span>
+    </a>
+    <button class="nav-toggle" aria-label="開啟選單">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="about.html">關於我們</a></li>
+      <li><a href="services.html">服務項目</a></li>
+      <li><a href="eligibility.html">申請資格與補助</a></li>
+      <li><a href="resources.html">教育資源</a></li>
+      <li><a href="contact.html">聯絡我們</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="container">
+
+  <section class="section">
+    <h1 class="section-title">我們的服務項目</h1>
+    <p class="section-subtitle">從身體照顧到喘息服務，陪伴長輩與照顧者一起安心生活</p>
+
+    <div id="home-care" class="service-block reveal">
+      <h3 id="homeCareTitle">🏠 一、居家照顧服務</h3>
+      <div id="homeCareSubtitle" style="font-size:14px;color:var(--color-muted);margin-bottom:14px;"></div>
+      <div id="homeCareItems"></div>
+    </div>
+
+    <div id="respite-care" class="service-block respite-block reveal">
+      <h3 id="respiteTitle">🧹 二、居家喘息服務</h3>
+      <div id="respiteItems"></div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <p>© <span id="footerYear"></span> 芳心居家長照機構 All Rights Reserved.</p>
+  <p>台南市佳里區中興街22號1F ｜ <a href="tel:0965833585">0965-833-585</a></p>
+</footer>
+
+<div class="bgm-player">
+  <button id="bgmToggle" class="bgm-btn" aria-label="播放背景音樂">🎵</button>
+  <audio id="bgmAudio" src="audio/bgm.mp3" loop preload="none"></audio>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+async function renderServices() {
+  const data = await loadJSON('content/services.json');
+  if (!data) return;
+
+  document.getElementById('homeCareTitle').textContent = data.home_care_title;
+  document.getElementById('homeCareSubtitle').textContent = data.home_care_subtitle;
+  document.getElementById('homeCareItems').innerHTML = (data.home_care_items || []).map(i => `
+    <div class="sub-service"><strong>${i.title}：</strong><br>${i.text}</div>
+  `).join('');
+
+  document.getElementById('respiteTitle').textContent = data.respite_title;
+  document.getElementById('respiteItems').innerHTML = (data.respite_items || []).map(i => `
+    <div class="sub-service"><strong>${i.title}：</strong><br>${i.text}</div>
+  `).join('');
+
+  // 若網址帶有錨點,平滑捲動到對應區塊
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+  }
+}
+renderServices();
+</script>
+</body>
+</html>

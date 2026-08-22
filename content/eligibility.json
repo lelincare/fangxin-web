@@ -1,0 +1,18 @@
+{
+  "eligibility_title": "👵 長照服務申請資格",
+  "eligibility_intro": "經長照管理中心評估，符合長期照顧需要等級者，且具備下列任一身分，即可申請長照服務：",
+  "eligibility_items": [
+    { "text": "65 歲以上失能長者。", "alert": "" },
+    { "text": "55 歲以上失能原住民。", "alert": "" },
+    { "text": "50 歲以上失智症者。", "alert": "📢 115年1月1日起新增49歲以下失智症者。" },
+    { "text": "失能身心障礙者（不限年齡）。", "alert": "" },
+    { "text": "急性後期整合照護計畫（PAC）之收案對象。", "alert": "📢 如年輕型中風、癌症患者等需復能照顧者。" }
+  ],
+  "subsidy_title": "💰 補助原則",
+  "subsidy_intro": "依身分別不同，政府提供補助：",
+  "subsidy_rows": [
+    { "category": "低收入戶", "percent": "100%", "note": "免自付額" },
+    { "category": "中低收入戶", "percent": "95%", "note": "僅需付 5%" },
+    { "category": "一般戶", "percent": "84%", "note": "僅需付 16%" }
+  ]
+}

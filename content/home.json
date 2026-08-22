@@ -1,0 +1,31 @@
+{
+  "hero_title": "芳心居家長照機構",
+  "hero_tagline": "交給芳心，家屬放心",
+  "hero_intro": "我們是由資深護理師團隊創立，致力於提供有溫度的專業照護。讓長輩在家也能享有尊嚴、舒適的生活品質。",
+  "service_area_label": "🚚 服務地區",
+  "service_area_text": "佳里區、麻豆區、學甲區",
+  "cta_primary_text": "立即諮詢",
+  "cta_primary_link": "contact.html",
+  "cta_secondary_text": "了解服務項目",
+  "cta_secondary_link": "services.html",
+  "features": [
+    {
+      "icon": "🏠",
+      "title": "居家照顧服務",
+      "desc": "居家服務員到宅協助身體照顧、生活照顧與陪同外出。",
+      "link": "services.html#home-care"
+    },
+    {
+      "icon": "🧹",
+      "title": "居家喘息服務",
+      "desc": "替家庭照顧者暫時接手照護工作，讓您獲得適當休息。",
+      "link": "services.html#respite-care"
+    },
+    {
+      "icon": "🤝",
+      "title": "長照 3.0 專業連結",
+      "desc": "護理師團隊主導，連結復健、營養、輔具等社區資源。",
+      "link": "about.html#mission"
+    }
+  ]
+}
