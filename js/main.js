@@ -50,28 +50,31 @@ function initRevealOnScroll() {
   items.forEach(el => observer.observe(el));
 }
 
-// ===== 背景音樂播放器(手動播放鍵,不自動播放) =====
+// ===== 背景音樂播放器 =====
+// 瀏覽器會阻擋完全沒有互動就自動播放有聲音的內容,
+// 因此改為「使用者第一次與網頁互動時(點擊/捲動/按鍵)自動開始播放」,
+// 這樣既符合瀏覽器政策,體驗上也幾乎等同於「一進站就播放」。
+// 播放鍵仍保留,使用者隨時可以手動暫停/重新播放。
 function initBgmPlayer() {
   const btn = document.getElementById('bgmToggle');
   const audio = document.getElementById('bgmAudio');
   if (!btn || !audio) return;
 
-  // 記住使用者在本次瀏覽中的播放狀態(跨頁面),但絕不自動播放,需使用者主動按過一次
   const STORAGE_KEY = 'fangxin_bgm_playing';
+  let autoplayAttempted = false;
 
   function setPlayingState(playing) {
     btn.classList.toggle('is-playing', playing);
     btn.setAttribute('aria-label', playing ? '暫停背景音樂' : '播放背景音樂');
   }
 
+  // 使用者手動按播放鍵
   btn.addEventListener('click', () => {
     if (audio.paused) {
       audio.play().then(() => {
         setPlayingState(true);
         sessionStorage.setItem(STORAGE_KEY, '1');
-      }).catch(() => {
-        // 瀏覽器阻擋自動播放等情況
-      });
+      }).catch(() => {});
     } else {
       audio.pause();
       setPlayingState(false);
@@ -79,7 +82,30 @@ function initBgmPlayer() {
     }
   });
 
-  // 只有使用者「這次瀏覽中已經手動按過播放」,切換頁面才延續播放狀態
+  // 使用者若明確按過暫停,就不要再自動幫他播放
+  function userHasPaused() {
+    return sessionStorage.getItem(STORAGE_KEY) === '0';
+  }
+
+  // 第一次互動(點擊/捲動/按鍵/觸控)時嘗試自動播放
+  function tryAutoplayOnFirstInteraction() {
+    if (autoplayAttempted || userHasPaused() || !audio.paused) return;
+    autoplayAttempted = true;
+    audio.play().then(() => {
+      setPlayingState(true);
+      sessionStorage.setItem(STORAGE_KEY, '1');
+    }).catch(() => {
+      // 少數情況仍可能被擋下,使用者可自行按播放鍵
+      autoplayAttempted = false;
+    });
+  }
+
+  const interactionEvents = ['click', 'scroll', 'keydown', 'touchstart'];
+  interactionEvents.forEach(evt => {
+    window.addEventListener(evt, tryAutoplayOnFirstInteraction, { once: true, passive: true });
+  });
+
+  // 如果本次瀏覽已經在其他頁面播放過,切換頁面時延續播放狀態
   if (sessionStorage.getItem(STORAGE_KEY) === '1') {
     audio.play().then(() => setPlayingState(true)).catch(() => setPlayingState(false));
   } else {
